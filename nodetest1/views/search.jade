@@ -1,0 +1,21 @@
+extends layout
+
+block content
+	h1 Tickets Search in Jira
+	form
+		p Select Project:
+		select
+			option(value=0) Learn
+			option(value=1) Ultra
+
+	form#searchKeyWords(name="search",method="post",action="/adduser")
+		p Input Key Words for Search
+		input#inputKeyWords(type="text", placeholder="key words", style="height:20px;width:400px", name="keywords")
+		button#btnSearch(type="submit") Search
+	
+
+	h1 Search Result list     
+	form#formAddUser(name="adduser",method="post",action="/adduser")
+		input#inputUserName(type="text", placeholder="username", name="username")
+		input#inputUserEmail(type="text", placeholder="useremail", name="useremail")
+		button#btnSubmit(type="submit") submit
