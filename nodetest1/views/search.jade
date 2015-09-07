@@ -10,13 +10,31 @@ block content
 
 	form#searchKeyWords(name="search",method="post",action="/adduser")
 		p Input Key Words for Search
-		input#inputKeyWords(type="text", placeholder="key words", style="height:20px;width:400px", name="keywords")
+		input#inputKeyWords(type="text", placeholder="key words", style="height:20px;width:400px;margin-right:30px", name="keywords")
 		button#btnSearch(type="submit") Search
-	
 
-	h1 Search Result list     
-	form#formAddUser(name="adduser",method="post",action="/adduser")
-		input#inputUserName(type="text", placeholder="username", name="username")
-		input#inputUserEmail(type="text", placeholder="useremail", name="useremail")
-		input#inputUserName(type="text", placeholder="username", name="username")
-		input#inputUserEmail(type="text", placeholder="useremail", name="useremail")
+	h2 Search Result list     
+	table(border="1")
+		tr
+			th ID
+			th Summary
+			th Status
+			th Frequency
+		tr
+			th(align="left") 
+				a(href="https://jira.bbpd.io:8443/browse/LRN-102182") LRN-102182
+			th(align="left") Stream dropdown behind "View new posts"
+			th NERV VERIFIED
+			th 13
+		tr
+			th(align="left") 
+				a(href="https://jira.bbpd.io:8443/browse/LRN-87050") LRN-87050
+			th(align="left") Ultra Bug Bash - New Activity message for Stream appears on top of Main Menu when expanded
+			th NERV VERIFIED
+			th 8
+		tr
+			th(align="left") 
+				a(href="https://jira.bbpd.io:8443/browse/LRN-97362") LRN-97362
+			th(align="left") Ensure custom controls provide proper textual roles and descriptions
+			th NERV TEST
+			th 2
