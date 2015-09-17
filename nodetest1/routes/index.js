@@ -1,35 +1,11 @@
 var express = require('express');
 var router = express.Router();
-//var jiraClient = require('jira-connector');
-var querystring = require('querystring');
-//var url = require('url');
 var https = require('https');
-//var https = require('https');
-//var util = require('util');
-
-var request=require('request');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'TONY' });
 });
-
-
-/* GET Userlist page. */
-// router.get('/userlist', function(req, res, next) {
-// 	var db = req.db;
-// 	var collection = db.get('usercollection');
-// 	collection.find({},{},function(e,docs) {
-// 		res.render('userlist', {
-// 			"userlist" : docs
-// 		});
-// 	});
-// });
-
-/* GET New User page. */
-// router.get('/newuser', function(req, res) {
-//     res.render('newuser', { title: 'Add New User' });
-// });
 
 /* GET Jira Search page. */
 router.get('/search', function(req, res, next) {
@@ -47,10 +23,10 @@ router.post('/query', function(req, jiraResponse, next) {
     var keywordsList = strKeywords.split(" ");
 
     var jqlStr = 'project = ' + projectName + ' AND issuetype = Fix AND text ~ "' + strKeywords + '" ORDER BY createdDate DESC';
-    //var jqlStr = 'reporter = currentUser() ORDER BY createdDate DESC';
     var postData = {
         jql: jqlStr,
         startAt: 0,
+        // no limition for the query results count
         //maxResults: 100,
         validateQuery: true,
         fields: ['key','summary','description','status']
@@ -114,26 +90,22 @@ function matchSearch (jiraResults,keyWordsList){
     var jiraItemList = jiraResults.issues;
     var matchRateList = [];
 
-    //for (var i=0; i<jiraIteamList.length; i++){
-    //    for (var j=0; j<keyWordsList.length; j++) {
-    //
-    //    }
-    //}
-
     jiraItemList.forEach(function(jiraTicket, jiraTicketIndex){
 
         var matchRate = 0;
 
         keyWordsList.forEach(function(keyword,keyWordIndex){
 
-            // Get keyword fequency in summary and description
-            var fequencyInSummary = jiraTicket.fields.summary.split(keyword).length - 1;
-            var fequencyInDescription = jiraTicket.fields.description.split(keyword).length - 1;
+            // Search key words in su
+            var inSummary = jiraTicket.fields.summary.split(keyword).length == 1 ? 0 : 1;
+            var inDescription = jiraTicket.fields.description.split(keyword).length == 1 ? 0 : 1;
 
-            matchRate = matchRate + fequencyInSummary * 70 + fequencyInDescription * 30;
-        })
+            matchRate = matchRate + inSummary * 80 + inDescription * 20;
+
+        });
 
         matchRateList[jiraTicketIndex] = [jiraTicketIndex, matchRate];
+
     });
     // Re-order the rate list according rate by decrease order.
     matchRateList = matchRateList.sort(function(x,y){
@@ -148,6 +120,7 @@ function matchSearch (jiraResults,keyWordsList){
         // Get jira iteam list indexes for top 10 match rate
         var jiraIteamListIndex = matchRateList[i][0];
         sortedJiraItemList[i] = jiraItemList[jiraIteamListIndex];
+        //console.log(matchRateList[i][1]);
     }
 
     return sortedJiraItemList;
